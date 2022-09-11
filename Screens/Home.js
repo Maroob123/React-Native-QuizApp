@@ -1,20 +1,21 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import React from 'react';
 import { Title } from '../Components';
-import HomeBanner from '../assets/HomeBanner.png';
+import HomeBanner from '../assets/home2.png';
 
 const Home = ({navigation}) => {
   return (
-    <View>
+    <View style={styles.container}>
       <Title />
       <View style={styles.bannerContainer}>
         <Image source={HomeBanner} 
-        style={styles.banner}
+        style={styles.banner} 
         resizeMode="contain"
         />
       </View>
-      <TouchableOpacity onPress={()=>navigation.navigate("Quiz")}>
-          <Text>Start</Text>
+      <TouchableOpacity onPress={()=>navigation.navigate("Quiz")}
+      style={styles.button}>
+          <Text style={styles.buttonText}>Start</Text>
       </TouchableOpacity>
     </View>
   )
@@ -30,5 +31,25 @@ const styles = StyleSheet.create({
   bannerContainer:{
     justifyContent: 'center',
     alignItems: 'center',
-  }
+    flex: 1,
+  },
+  container:{
+    paddingTop: 40,
+    paddingHorizontal: 20,
+    height: "100%",
+  },
+  button:{
+    width: '100%',
+    backgroundColor: '#1A759F',
+    padding: 16,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  buttonText:{
+    fontSize: 24,
+    fontWeight: '600',
+    color: 'white',
+
+  },  
 })

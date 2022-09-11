@@ -5,7 +5,7 @@ import HomeBanner from '../assets/HomeBanner.png';
 
 const Results = ({navigation}) => {
   return (
-    <View>
+    <View style={styles.container}>
       <Title />
       <View style={styles.bannerContainer}>
         <Image source={HomeBanner} 
@@ -14,7 +14,7 @@ const Results = ({navigation}) => {
         />
       </View>
       <TouchableOpacity onPress={()=>navigation.navigate("Home")}>
-          <Text>Start</Text>
+          <Text>Home</Text>
       </TouchableOpacity>
     </View>
   )
@@ -30,5 +30,10 @@ const styles = StyleSheet.create({
   bannerContainer:{
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  container:{
+    paddingTop: 40,
+    paddingHorizontal: 20,
+    height: "100%",
+  },
 })
