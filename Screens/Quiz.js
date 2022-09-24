@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import Loading from '../assets/loading2.gif'
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
