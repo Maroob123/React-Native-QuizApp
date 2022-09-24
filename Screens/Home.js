@@ -6,7 +6,7 @@ import HomeBanner from '../assets/home2.png';
 const Home = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <Title />
+      <Title titleText="Quizzler" />
       <View style={styles.bannerContainer}>
         <Image source={HomeBanner} 
         style={styles.banner} 
