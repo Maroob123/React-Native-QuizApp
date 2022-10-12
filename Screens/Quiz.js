@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
+import { abs } from 'react-native-reanimated';
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -42,63 +43,62 @@ const Quiz = ({ navigation }) => {
     return options
   }
 
-  const handleSelectedOption=(_option)=>{
-    if(_option === questions[ques].correct_answer){
-      setScore(score+10)
+  const handleSelectedOption = (_option) => {
+    if (_option === questions[ques].correct_answer) {
+      setScore(score + 10)
     }
-    if(ques !== 9){
+    if (ques !== 9) {
       setQues(ques + 1)
       setOptions(generateOptionsAndShuffle(questions[ques + 1]))
     }
-    if(ques === 9){
+    if (ques === 9) {
       handleShowResult()
     }
   }
 
-  const handleShowResult = () =>{
-    navigation.navigate("Result",{
+  const handleShowResult = () => {
+    navigation.navigate("Result", {
       score: score
     })
   }
   return (
     <View style={styles.container}>
-      {isloading ? <View style={styles.bannerContainer}> 
-      <ActivityIndicator size="large" color="#34A0A4" />
+      {isloading ? <View style={styles.bannerContainer}>
+        <ActivityIndicator size="large" color="#34A0A4" />
       </View> : questions &&
-        <View style={styles.parent}>
-          <View style={styles.top}>
-            <Text style={styles.question}>Q. {decodeURIComponent(questions[ques].question)}</Text>
-          </View>
-          <View style={styles.options}>
-            <TouchableOpacity style={styles.optionButton} onPress={()=>handleSelectedOption(options[0])}>
-              <Text style={styles.option}>{decodeURIComponent(options[0])}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton} onPress={()=>handleSelectedOption(options[1])}>
-              <Text style={styles.option}>{decodeURIComponent(options[1])}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton} onPress={()=>handleSelectedOption(options[2])}>
-              <Text style={styles.option}>{decodeURIComponent(options[2])}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.optionButton} onPress={()=>handleSelectedOption(options[3])}>
-              <Text style={styles.option}>{decodeURIComponent(options[3])}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.bottom}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>SKIP</Text>
-            </TouchableOpacity>
-            {ques !== 9 ?
-              <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-                <Text style={styles.buttonText}>NEXT</Text>
-              </TouchableOpacity> :
-              <TouchableOpacity style={styles.button} onPress={handleShowResult}>
-                <Text style={styles.buttonText}>SHOW RESULTS</Text>
-              </TouchableOpacity>}
-            {/* <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>END</Text>
-            </TouchableOpacity> */}
+      <View style={styles.parent}>
+        <View style={styles.topParent}>
+          <View style={styles.topChild}>
+            <Text style={styles.question}>{decodeURIComponent(questions[ques].question)}</Text>
           </View>
         </View>
+        <View style={styles.options}>
+          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[0])}>
+            <Text style={styles.option}>{decodeURIComponent(options[0])}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[1])}>
+            <Text style={styles.option}>{decodeURIComponent(options[1])}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[2])}>
+            <Text style={styles.option}>{decodeURIComponent(options[2])}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[3])}>
+            <Text style={styles.option}>{decodeURIComponent(options[3])}</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.bottom}>
+          {ques !== 9 ?
+            <TouchableOpacity style={styles.button} onPress={handleNextPress}>
+              <Text style={styles.buttonText}>Next</Text>
+            </TouchableOpacity> :
+            <TouchableOpacity style={styles.button} onPress={handleShowResult}>
+              <Text style={styles.buttonText}>Show Results</Text>
+            </TouchableOpacity>}
+          {/* <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>END</Text>
+            </TouchableOpacity> */}
+        </View>
+      </View>
       }
     </View>
   )
@@ -112,50 +112,69 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    backgroundColor: '#1A759F',
-    padding: 12,
+    backgroundColor: '#955ee1',
+    padding: 16,
     paddingHorizontal: 16,
-    borderRadius: 16,
+    // borderRadius: 16,
+    alignSelf: "stretch",
     alignItems: 'center',
-    marginBottom: 30,
+    width: "100%",
   },
   buttonText: {
     fontSize: 18,
     fontWeight: '600',
     color: 'white',
   },
-  bannerContainer:{
+  bannerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
   },
   container: {
-    paddingHorizontal: 20,
     height: "100%",
   },
   options: {
     marginVertical: 16,
     flex: 1,
+    paddingHorizontal: 20,
   },
   option: {
     fontSize: 18,
     fontWeight: '500',
-    color: 'white',
+    // color: 'white',
   },
   optionButton: {
     paddingVertical: 12,
     marginVertical: 6,
-    backgroundColor: '#34A0A4',
+    // backgroundColor: '#34A0A4',
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: 3,
+    borderWidth: 2,
+    borderColor: "#E0E0E0",
   },
   parent: {
     height: '100%',
   },
   question: {
-    fontSize: 28,
+    fontSize: 22,
+    textAlign: "center",
+    color: "white",
   },
-  top: {
-    marginVertical: 16,
+  topParent: {
+    height: '30%',
+    width: '100%',
+    transform: [{ scaleX: 2 }],
+    borderBottomStartRadius: 200,
+    borderBottomEndRadius: 200,
+    overflow: 'hidden',
+  },
+  topChild: {
+    flex: 1,
+    transform: [{ scaleX: 0.5 }],
+
+    backgroundColor: '#955ee1',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: "center",
   },
 })
