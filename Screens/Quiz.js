@@ -1,6 +1,5 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { abs } from 'react-native-reanimated';
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -15,7 +14,7 @@ const Quiz = ({ navigation }) => {
   const [options, setOptions] = useState([]);
   const [score, setScore] = useState(0);
   const [isloading, setIsloading] = useState(false);
-
+  const [selected, setSelected] = useState("");
   const getQuiz = async () => {
     setIsloading(true)
     const url = 'https://opentdb.com/api.php?amount=10&type=multiple&encode=url3986';
@@ -30,8 +29,21 @@ const Quiz = ({ navigation }) => {
   }, [])
 
   const handleNextPress = () => {
-    setQues(ques + 1)
-    setOptions(generateOptionsAndShuffle(questions[ques + 1]))
+    if (selected === ""){
+      alert("Please Choose a option")
+      return
+    }
+    if (selected === questions[ques].correct_answer) {
+      setScore(score + 10)
+    }
+    if (ques !== 9) {
+      setQues(ques + 1)
+      setOptions(generateOptionsAndShuffle(questions[ques + 1]))
+    }
+    if (ques === 9) {
+      handleShowResult()
+    }
+    setSelected("")
   }
 
   const generateOptionsAndShuffle = (_question) => {
@@ -43,19 +55,6 @@ const Quiz = ({ navigation }) => {
     return options
   }
 
-  const handleSelectedOption = (_option) => {
-    if (_option === questions[ques].correct_answer) {
-      setScore(score + 10)
-    }
-    if (ques !== 9) {
-      setQues(ques + 1)
-      setOptions(generateOptionsAndShuffle(questions[ques + 1]))
-    }
-    if (ques === 9) {
-      handleShowResult()
-    }
-  }
-
   const handleShowResult = () => {
     navigation.navigate("Result", {
       score: score
@@ -64,7 +63,7 @@ const Quiz = ({ navigation }) => {
   return (
     <View style={styles.container}>
       {isloading ? <View style={styles.bannerContainer}>
-        <ActivityIndicator size="large" color="#34A0A4" />
+        <ActivityIndicator size="large" color="#955ee1" />
       </View> : questions &&
       <View style={styles.parent}>
         <View style={styles.topParent}>
@@ -73,27 +72,23 @@ const Quiz = ({ navigation }) => {
           </View>
         </View>
         <View style={styles.options}>
-          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[0])}>
+          <TouchableOpacity style={selected=== options[0] ? styles.optionButton2: styles.optionButton} onPress={() => setSelected(options[0])}>
             <Text style={styles.option}>{decodeURIComponent(options[0])}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[1])}>
+          <TouchableOpacity style={selected=== options[1] ? styles.optionButton2: styles.optionButton} onPress={() => setSelected(options[1])}>
             <Text style={styles.option}>{decodeURIComponent(options[1])}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[2])}>
+          <TouchableOpacity style={selected=== options[2] ? styles.optionButton2: styles.optionButton} onPress={() => setSelected(options[2])}>
             <Text style={styles.option}>{decodeURIComponent(options[2])}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.optionButton} onPress={() => handleSelectedOption(options[3])}>
+          <TouchableOpacity style={selected=== options[3] ? styles.optionButton2: styles.optionButton} onPress={() => setSelected(options[3])}>
             <Text style={styles.option}>{decodeURIComponent(options[3])}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.bottom}>
-          {ques !== 9 ?
             <TouchableOpacity style={styles.button} onPress={handleNextPress}>
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity> :
-            <TouchableOpacity style={styles.button} onPress={handleShowResult}>
-              <Text style={styles.buttonText}>Show Results</Text>
-            </TouchableOpacity>}
+              <Text style={styles.buttonText}>{ques !== 9 ? "Next" : "SHOW RESULTS"}</Text>
+            </TouchableOpacity>
           {/* <TouchableOpacity style={styles.button}>
               <Text style={styles.buttonText}>END</Text>
             </TouchableOpacity> */}
@@ -152,6 +147,14 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#E0E0E0",
   },
+  optionButton2: {
+    paddingVertical: 12,
+    marginVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 3,
+    borderWidth: 2,
+    borderColor: "#955ee1",
+  },
   parent: {
     height: '100%',
   },
@@ -159,13 +162,14 @@ const styles = StyleSheet.create({
     fontSize: 22,
     textAlign: "center",
     color: "white",
+    paddingHorizontal: 20,
   },
   topParent: {
     height: '30%',
     width: '100%',
     transform: [{ scaleX: 2 }],
-    borderBottomStartRadius: 200,
-    borderBottomEndRadius: 200,
+    borderBottomStartRadius: 500,
+    borderBottomEndRadius: 500,
     overflow: 'hidden',
   },
   topChild: {
