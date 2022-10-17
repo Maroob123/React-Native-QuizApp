@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import {StyleSheet} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import MyStack from './navigation';
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
+
 
 const App = () => {
+  SystemNavigationBar.immersive();
   useEffect(() => {
     SplashScreen.hide();
   }, [])
